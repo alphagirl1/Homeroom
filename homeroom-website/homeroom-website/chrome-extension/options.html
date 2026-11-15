@@ -1,0 +1,20 @@
+<!DOCTYPE html>
+<html lang="en"><head><meta charset="utf-8"><title>Homeroom Sync settings</title><link rel="stylesheet" href="ui.css">
+<style>body{max-width:720px;margin:0 auto;padding:28px 20px;display:grid;gap:16px}.site input[type=url]{width:100%}</style></head>
+<body>
+  <h1><span class="logo">H</span> Homeroom Sync</h1>
+  <p class="muted">Every so often this extension opens each site below in a minimized window, using the sign-ins already in Chrome, reads your assignment list, and sends it to your Homeroom. It doesn’t store passwords. It only works while Chrome is open.</p>
+  <section class="card stack">
+    <b>1. Connect to your Homeroom</b>
+    <small class="muted">In Homeroom open <b>Logins</b> (the key at the top) → Chrome extension → <b>Get my connection code</b>. Paste it here.</small>
+    <div class="row"><input id="code" placeholder="HR1:…" style="flex:1" autocomplete="off"><button class="btn primary" id="save">Save &amp; test</button></div>
+    <div id="codeMsg"></div>
+  </section>
+  <section class="card stack">
+    <div class="row" style="justify-content:space-between"><b>2. Sites to check</b><label class="row"><span class="muted">Every</span><select id="minutes"><option>15</option><option selected>30</option><option>60</option></select><span class="muted">minutes</span></label></div>
+    <small class="muted">For best results, sign in to the site, open the page that lists your assignments, click the Homeroom Sync button in the toolbar, and choose “Use this page”. Or paste that page’s address here.</small>
+    <div id="sites"></div>
+    <div class="row"><button class="btn primary" id="saveSites">Save sites</button><button class="btn" id="syncNow">Sync now</button><span id="sitesMsg" class="muted"></span></div>
+  </section>
+  <script src="options.js"></script>
+</body></html>

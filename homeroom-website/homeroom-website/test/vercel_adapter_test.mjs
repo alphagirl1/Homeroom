@@ -1,0 +1,33 @@
+// Runs api/index.js the way Vercel does (a Node request/response handler) and calls it over HTTP.
+import http from 'node:http';
+import fs from 'node:fs';
+process.env.HOMEROOM_SECRET = 'adapter-test-secret-1234567890';
+process.env.HOMEROOM_DATA_FILE = '/tmp/hr-adapter.json';
+try { fs.unlinkSync(process.env.HOMEROOM_DATA_FILE); } catch {}
+const { default: handler } = await import('../api/index.js');
+const srv = http.createServer(handler).listen(0);
+const base = `http://127.0.0.1:${srv.address().port}`;
+let bad = 0; const ok = (c, m) => { console.log((c ? '  ✓ ' : '  ✗ ') + m); if (!c) bad++; };
+const post = (path, body, cookie = '', type = 'application/json') => fetch(base + path, { method: 'POST', headers: { 'Content-Type': type, 'X-Homeroom': '1', cookie, 'X-Forwarded-Proto': 'https', 'X-Forwarded-Host': 'homeroom-demo.vercel.app' }, body: typeof body === 'string' ? body : JSON.stringify(body) });
+let r = await post('/api/signup', { username: 'nethra', password: 'correct horse' });
+const cookie = (r.headers.getSetCookie()[0] || '').split(';')[0];
+ok(r.status === 200 && /hr_s=/.test(cookie), 'sign-up through the Vercel handler sets the session cookie');
+ok(/Secure/.test(r.headers.getSetCookie()[0]), 'cookie is Secure behind Vercel’s https');
+r = await post('/api/bootstrap', {}, cookie);
+ok(r.status === 200 && (await r.json()).user.username === 'nethra', 'bootstrap at /api/bootstrap');
+r = await post('/api/index?__p=pull', {}, cookie);
+ok(r.status === 200 && (await r.json()).data, 'rewritten form /api/index?__p=pull also works');
+r = await post('/api/extkey', {}, cookie);
+const ek = await r.json();
+ok(ek.url === 'https://homeroom-demo.vercel.app/api/ext', 'extension address uses the public site address');
+r = await post('/api/ext', JSON.stringify({ key: ek.key, ping: true }), '', 'text/plain;charset=utf-8');
+ok((await r.json()).pong === true && r.headers.get('access-control-allow-origin') === '*', 'extension ping with a text/plain body');
+r = await post('/api/calfeed', {}, cookie);
+const feed = (await r.json()).url;
+r = await fetch(base + new URL(feed).pathname);
+ok(r.status === 200 && (await r.text()).startsWith('BEGIN:VCALENDAR'), 'calendar feed at /cal/….ics');
+r = await fetch(base + '/api/health');
+ok((await r.json()).ready === true, 'health check');
+srv.close();
+console.log(bad ? `${bad} FAILED` : 'Vercel adapter checks passed.');
+process.exit(bad ? 1 : 0);

@@ -1,0 +1,20 @@
+:root{--bg:#F2F4EF;--surface:#fff;--line:#DDE2D7;--ink:#242925;--muted:#5D665E;--accent:#5B8263;--bad:#B4544F;--warn:#A6762A;--good:#4C8757;font:14px/1.45 "Atkinson Hyperlegible Next",system-ui,-apple-system,"Segoe UI",sans-serif;color:var(--ink);background:var(--bg)}
+body{margin:0}
+h1{font:600 1.15rem system-ui;margin:0;display:flex;align-items:center;gap:8px}
+.logo{width:24px;height:24px;border-radius:7px;background:var(--accent);color:#fff;display:inline-grid;place-items:center;font-weight:700;font-size:13px}
+.card{background:var(--surface);border:1px solid var(--line);border-radius:12px;padding:12px 14px}
+.muted{color:var(--muted)} small{font-size:12px}
+.btn{border:1px solid var(--line);background:var(--surface);border-radius:9px;padding:7px 12px;font:inherit;font-weight:600;cursor:pointer;color:var(--ink)}
+.btn.primary{background:var(--accent);border-color:var(--accent);color:#fff}
+.btn:disabled{opacity:.55;cursor:default}
+input,select{font:inherit;border:1px solid var(--line);border-radius:9px;padding:7px 9px;background:#fff;color:var(--ink);min-width:0}
+input[type=checkbox]{accent-color:var(--accent);width:16px;height:16px}
+.row{display:flex;align-items:center;gap:8px}
+.stack{display:grid;gap:10px}
+.site{display:grid;grid-template-columns:auto 1fr auto;gap:6px 10px;align-items:center;padding:8px 0;border-top:1px solid var(--line)}
+.site:first-child{border-top:0}
+.pill{font-size:12px;font-weight:700;padding:1px 8px;border-radius:99px;background:#eef1ec;color:var(--muted);white-space:nowrap}
+.pill.bad{background:#f6e3e2;color:var(--bad)} .pill.good{background:#e3efe5;color:var(--good)}
+.note{padding:8px 10px;border-radius:9px;background:#e7eee5;font-size:13px}
+.note.bad{background:#f6e3e2;color:#7d302c}
+a{color:var(--accent)}

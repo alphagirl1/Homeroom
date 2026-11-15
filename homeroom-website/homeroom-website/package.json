@@ -1,0 +1,13 @@
+{
+  "name": "homeroom",
+  "version": "1.0.0",
+  "private": true,
+  "type": "module",
+  "description": "Assignments, grades, due dates and announcements from all your school sites in one place.",
+  "engines": { "node": ">=20" },
+  "scripts": {
+    "start": "node dev-server.mjs",
+    "build": "node build.mjs",
+    "test": "node test/push_vector.mjs && TZ=UTC node test/server_test.mjs && node test/vercel_adapter_test.mjs"
+  }
+}
